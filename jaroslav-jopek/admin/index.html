@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin | Jaroslav Jopek</title><meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="../assets/poradca.css">
+<style>
+:root{--accent:#66192F;--na-accent:#ffffff;--accent-text:#66192F;--accent-deep:#501425;--tint:#f0e8ea;--tint2:#e0d1d5}
+body{font-size:15px}
+.prihlas{min-height:100svh;display:grid;place-items:center;padding:24px}
+.prihlas form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:40px;width:min(420px,100%);display:grid;gap:20px}
+.app{display:none;grid-template-columns:240px minmax(0,1fr);min-height:100svh}
+.app.on{display:grid}
+.bok{background:var(--card);border-right:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:4px}
+.bok .znak{margin-bottom:20px}
+.bok button{all:unset;cursor:pointer;padding:10px 12px;border-radius:10px;font-weight:600;color:var(--ink-soft);display:flex;justify-content:space-between}
+.bok button[aria-current]{background:var(--tint);color:var(--accent-text)}
+.bok button span{font-size:12px;background:var(--accent);color:var(--na-accent);border-radius:20px;padding:1px 8px}
+.bok #reset{margin-top:auto;color:var(--muted);font-size:14px}
+.obsah{padding:32px clamp(16px,3vw,40px);min-width:0}
+.obsah h1{font-size:28px;margin-bottom:6px}
+.kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi b{display:block;font-size:30px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:13px}
+.kpi .pozor b{color:#b42318}
+.tab{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tab th,.tab td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.tab th{font-size:13px;color:var(--muted);font-weight:600;background:#fafbfc}
+.tab tr:last-child td{border-bottom:0}
+.tab tr.klik{cursor:pointer} .tab tr.klik:hover td{background:var(--tint)}
+.stav{display:inline-block;padding:2px 10px;border-radius:20px;font-size:13px;font-weight:600;background:#eef0f3;color:var(--ink-soft);white-space:nowrap}
+.stav--skoro{background:#fdecea;color:#b42318} .stav--mesiac{background:var(--tint2);color:var(--accent-text)}
+.lista{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0 14px}
+.lista input,.lista select{font:inherit;padding:10px 12px;border:1.5px solid #c9ced6;border-radius:10px;background:var(--card);min-width:0}
+.lista .btn{min-height:42px}
+.ul{display:grid;gap:8px}
+.ul label{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.ul input{width:20px;height:20px;accent-color:var(--accent);margin-top:1px}
+.ul .po{color:#b42318;font-weight:600}
+.ul .hotovo span:first-of-type{text-decoration:line-through;color:var(--muted)}
+.panel{position:fixed;inset:0 0 0 auto;width:min(460px,100%);background:var(--card);border-left:1px solid var(--line);padding:28px;overflow:auto;
+  transform:translateX(100%);visibility:hidden;transition:transform .25s,visibility .25s;z-index:40;box-shadow:-10px 0 40px rgba(20,23,28,.08)}
+.panel.on{transform:none;visibility:visible}
+.panel h2{font-size:24px} .panel .zavri{float:right}
+.panel textarea{width:100%;font:inherit;border:1.5px solid #c9ced6;border-radius:10px;padding:10px}
+.pozn{background:var(--paper);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:14px}
+.info{color:var(--muted);max-width:70ch}
+.prazdne{background:var(--card);border:1px dashed #c9ced6;border-radius:14px;padding:28px;text-align:center;color:var(--muted)}
+@media(max-width:860px){.app.on{grid-template-columns:1fr}.bok{flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}
+  .bok .znak{width:100%;margin-bottom:8px}.bok #reset{margin-top:0}.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tab .skry{display:none}}
+</style></head>
+<body>
+<div class="prihlas" id="prihlas">
+  <form>
+    <a class="znak" href="../"><span class="znak__mono">JJ</span>
+      <span class="znak__txt"><b>Jaroslav Jopek</b><span>Klientsky prehľad</span></span></a>
+    <div class="pole"><label for="heslo">Heslo</label><input id="heslo" type="password" autocomplete="current-password">
+      <small>Ukážkové heslo je <b>poradca</b>.</small><span class="chyba">Nesprávne heslo.</span></div>
+    <button class="btn btn--primary" type="submit">Prihlásiť sa</button>
+  </form>
+</div>
+<div class="app" id="app">
+  <aside class="bok">
+    <a class="znak" href="../"><span class="znak__mono">JJ</span>
+      <span class="znak__txt"><b>Jaroslav Jopek</b><span>finančný sprostredkovateľ</span></span></a>
+    <button data-v="prehlad" aria-current="page">Prehľad</button>
+    <button data-v="terminy">Termíny <span id="n-term"></span></button>
+    <button data-v="klienti">Klienti</button>
+    <button data-v="zmluvy">Zmluvy</button>
+    <button data-v="ulohy">Úlohy <span id="n-ul"></span></button>
+    <a href="#" id="reset">Obnoviť ukážkové dáta</a>
+  </aside>
+  <section class="obsah" id="obsah"></section>
+</div>
+<aside class="panel" id="panel" aria-label="Detail klienta"></aside>
+<script>
+(function(){
+var KEY='poradca-crm-jaroslav-jopek',SEED={"klienti": [{"id": 0, "meno": "Peter Horváth", "tel": "0903 412 587", "mesto": "Žilina", "poznamky": []}, {"id": 1, "meno": "Lucia Baláž", "tel": "0911 208 334", "mesto": "Martin", "poznamky": []}, {"id": 2, "meno": "Tomáš Kováč", "tel": "0905 771 902", "mesto": "Žilina", "poznamky": []}, {"id": 3, "meno": "Zuzana Varga", "tel": "0948 119 405", "mesto": "Bytča", "poznamky": []}, {"id": 4, "meno": "Michal Tóth", "tel": "0917 650 218", "mesto": "Kysucké Nové Mesto", "poznamky": []}, {"id": 5, "meno": "Katarína Nagy", "tel": "0902 384 761", "mesto": "Žilina", "poznamky": []}, {"id": 6, "meno": "Martin Molnár", "tel": "0915 227 093", "mesto": "Rajec", "poznamky": []}, {"id": 7, "meno": "Jana Šimko", "tel": "0944 516 830", "mesto": "Žilina", "poznamky": []}, {"id": 8, "meno": "Marek Lukáč", "tel": "0908 902 145", "mesto": "Považská Bystrica", "poznamky": []}, {"id": 9, "meno": "Veronika Kráľ", "tel": "0910 337 682", "mesto": "Žilina", "poznamky": []}, {"id": 10, "meno": "Juraj Polák", "tel": "0907 845 219", "mesto": "Martin", "poznamky": []}, {"id": 11, "meno": "Eva Hudák", "tel": "0949 603 127", "mesto": "Žilina", "poznamky": []}], "zmluvy": [{"id": 0, "klient": 0, "typ": "Hypotéka", "partner": "Slovenská sporiteľňa", "suma": "165 000 €", "dni": 34, "termin": "koniec fixácie"}, {"id": 1, "klient": 0, "typ": "Životné poistenie", "partner": "Allianz", "suma": "42 € / mes.", "dni": 120, "termin": "výročie"}, {"id": 2, "klient": 1, "typ": "Hypotéka", "partner": "VÚB banka", "suma": "210 000 €", "dni": 71, "termin": "koniec fixácie"}, {"id": 3, "klient": 2, "typ": "Poistenie domácnosti", "partner": "Generali", "suma": "14 € / mes.", "dni": 18, "termin": "výročie"}, {"id": 4, "klient": 2, "typ": "PZP a havarijné", "partner": "Kooperativa", "suma": "38 € / mes.", "dni": 52, "termin": "výročie"}, {"id": 5, "klient": 3, "typ": "III. pilier", "partner": "NN", "suma": "50 € / mes.", "dni": 200, "termin": "kontrola fondov"}, {"id": 6, "klient": 4, "typ": "Hypotéka", "partner": "Tatra banka", "suma": "128 000 €", "dni": 150, "termin": "koniec fixácie"}, {"id": 7, "klient": 5, "typ": "Investičný program", "partner": "Amundi", "suma": "100 € / mes.", "dni": 90, "termin": "ročná revízia"}, {"id": 8, "klient": 6, "typ": "Úver na bývanie", "partner": "Prima banka", "suma": "58 000 €", "dni": 9, "termin": "koniec fixácie"}, {"id": 9, "klient": 7, "typ": "Životné poistenie", "partner": "UNIQA", "suma": "35 € / mes.", "dni": 44, "termin": "výročie"}, {"id": 10, "klient": 8, "typ": "Hypotéka", "partner": "ČSOB", "suma": "189 000 €", "dni": 260, "termin": "koniec fixácie"}, {"id": 11, "klient": 9, "typ": "Sporenie pre deti", "partner": "Amundi", "suma": "40 € / mes.", "dni": 75, "termin": "ročná revízia"}, {"id": 12, "klient": 10, "typ": "Poistenie domu", "partner": "Allianz", "suma": "22 € / mes.", "dni": 27, "termin": "výročie"}, {"id": 13, "klient": 11, "typ": "III. pilier", "partner": "Allianz", "suma": "30 € / mes.", "dni": 140, "termin": "kontrola fondov"}], "ulohy": [{"id": 0, "text": "Zavolať kvôli refixácii", "klient": 6, "dni": -2, "hotovo": false}, {"id": 1, "text": "Poslať porovnanie poistenia domácnosti", "klient": 2, "dni": 1, "hotovo": false}, {"id": 2, "text": "Pripraviť ponuky na refinancovanie", "klient": 0, "dni": 5, "hotovo": false}, {"id": 3, "text": "Doplniť potvrdenie o príjme do banky", "klient": 1, "dni": 3, "hotovo": false}, {"id": 4, "text": "Revízia investičného programu", "klient": 5, "dni": 12, "hotovo": false}, {"id": 5, "text": "Stretnutie: poistenie domu", "klient": 10, "dni": -1, "hotovo": false}]};
+var D;try{D=JSON.parse(localStorage.getItem(KEY))}catch(x){}
+function novy(){var d=JSON.parse(JSON.stringify(SEED)),t=Date.now();
+  d.zmluvy.forEach(function(z){z.datum=new Date(t+z.dni*864e5).toISOString().slice(0,10)});
+  d.ulohy.forEach(function(u){u.datum=new Date(t+u.dni*864e5).toISOString().slice(0,10)});return d}
+if(!D||!D.klienti)D=novy();
+function uloz(){try{localStorage.setItem(KEY,JSON.stringify(D))}catch(x){}}
+var $=function(s){return document.querySelector(s)},esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+function dni(d){return Math.round((new Date(d)-new Date(new Date().toISOString().slice(0,10)))/864e5)}
+function dat(d){var x=new Date(d);return x.getDate()+'. '+(x.getMonth()+1)+'. '+x.getFullYear()}
+function stav(d){var n=dni(d);var c=n<=30?'stav stav--skoro':n<=90?'stav stav--mesiac':'stav';
+  return '<span class="'+c+'">'+(n<0?'pred '+(-n)+' dňami':n===0?'dnes':'o '+n+' dní')+'</span>'}
+function kl(id){return D.klienti.filter(function(k){return k.id==id})[0]||{meno:'?'}}
+function pocty(){var t=D.zmluvy.filter(function(z){return dni(z.datum)<=90}).length,u=D.ulohy.filter(function(u){return!u.hotovo&&dni(u.datum)<0}).length;
+  $('#n-term').textContent=t||'';$('#n-term').style.display=t?'':'none';$('#n-ul').textContent=u||'';$('#n-ul').style.display=u?'':'none'}
+function tabZmluv(zs){if(!zs.length)return '<div class="prazdne">Žiadne zmluvy. Pridajte klientovi prvú zmluvu.</div>';
+  return '<table class="tab"><thead><tr><th>Klient</th><th>Zmluva</th><th class="skry">Partner</th><th class="skry">Suma</th><th>Termín</th></tr></thead><tbody>'+
+  zs.map(function(z){return '<tr class="klik" data-k="'+z.klient+'"><td>'+esc(kl(z.klient).meno)+'</td><td>'+esc(z.typ)+'<br><span class="muted">'+esc(z.termin)+'</span></td><td class="skry">'+esc(z.partner)+'</td><td class="skry">'+esc(z.suma)+'</td><td>'+dat(z.datum)+'<br>'+stav(z.datum)+'</td></tr>'}).join('')+'</tbody></table>'}
+var V={
+ prehlad:function(){var z=D.zmluvy.slice().sort(function(a,b){return a.datum<b.datum?-1:1});
+  var fix=z.filter(function(x){return x.termin=='koniec fixácie'&&dni(x.datum)<=90}).length,vyr=z.filter(function(x){return x.termin=='výročie'&&dni(x.datum)<=60}).length,
+  po=D.ulohy.filter(function(u){return!u.hotovo&&dni(u.datum)<0}).length;
+  return '<h1>Dobrý deň</h1><p class="info">Najbližšie termíny klientov a úlohy na tento týždeň.</p><div class="kpi">'+
+  '<div><b>'+D.klienti.length+'</b><span>klientov</span></div><div><b>'+fix+'</b><span>fixácií končí do 90 dní</span></div>'+
+  '<div><b>'+vyr+'</b><span>výročí poistiek do 60 dní</span></div><div class="'+(po?'pozor':'')+'"><b>'+po+'</b><span>úloh po termíne</span></div></div>'+
+  '<h2 style="font-size:20px;margin-bottom:12px">Najbližšie termíny</h2>'+tabZmluv(z.filter(function(x){return dni(x.datum)>=0}).slice(0,6))},
+ terminy:function(){var z=D.zmluvy.filter(function(x){return dni(x.datum)<=90}).sort(function(a,b){return a.datum<b.datum?-1:1});
+  return '<h1>Termíny do 90 dní</h1><p class="info">Konce fixácií a výročia zmlúv. Klientovi sa oplatí ozvať s predstihom, pri fixácii ideálne 2 až 3 mesiace vopred.</p><div style="height:20px"></div>'+tabZmluv(z)},
+ klienti:function(q){q=(q||'').toLowerCase();var ks=D.klienti.filter(function(k){return!q||(k.meno+k.mesto).toLowerCase().indexOf(q)>=0});
+  return '<h1>Klienti</h1><div class="lista"><input id="hladaj" placeholder="Hľadať meno alebo mesto" aria-label="Hľadať" value="'+esc(q)+'"><button class="btn btn--primary" id="pridaj-k">Pridať klienta</button></div>'+
+  (ks.length?'<table class="tab"><thead><tr><th>Meno</th><th>Telefón</th><th class="skry">Mesto</th><th>Zmluvy</th></tr></thead><tbody>'+ks.map(function(k){
+   return '<tr class="klik" data-k="'+k.id+'"><td><b>'+esc(k.meno)+'</b></td><td>'+esc(k.tel)+'</td><td class="skry">'+esc(k.mesto)+'</td><td>'+D.zmluvy.filter(function(z){return z.klient==k.id}).length+'</td></tr>'}).join('')+'</tbody></table>'
+   :'<div class="prazdne">Nikoho sme nenašli. Skúste iné meno alebo pridajte nového klienta.</div>')},
+ zmluvy:function(){return '<h1>Zmluvy</h1><p class="info">Všetky zmluvy klientov zoradené podľa najbližšieho termínu.</p><div style="height:20px"></div>'+
+  tabZmluv(D.zmluvy.slice().sort(function(a,b){return a.datum<b.datum?-1:1}))},
+ ulohy:function(){var u=D.ulohy.slice().sort(function(a,b){return (a.hotovo-b.hotovo)||(a.datum<b.datum?-1:1)});
+  return '<h1>Úlohy</h1><form class="lista" id="nova-u"><input id="u-text" placeholder="Nová úloha" aria-label="Nová úloha" required style="flex:1 1 240px"><input id="u-datum" type="date" aria-label="Termín" required><button class="btn btn--primary">Pridať</button></form>'+
+  (u.length?'<div class="ul">'+u.map(function(x){var n=dni(x.datum);return '<label class="'+(x.hotovo?'hotovo':'')+'"><input type="checkbox" data-u="'+x.id+'"'+(x.hotovo?' checked':'')+'><span style="flex:1"><span>'+esc(x.text)+'</span><br><span class="muted">'+(x.klient!=null&&x.klient!==''?esc(kl(x.klient).meno)+', ':'')+'</span><span class="'+(!x.hotovo&&n<0?'po':'muted')+'">'+dat(x.datum)+'</span></span></label>'}).join('')+'</div>'
+   :'<div class="prazdne">Žiadne úlohy. Pridajte prvú hore.</div>')}
+};
+var akt='prehlad';
+function ukaz(v,q){akt=v;document.querySelectorAll('.bok button').forEach(function(b){b.toggleAttribute('aria-current',b.dataset.v===v)});
+  $('#obsah').innerHTML=V[v](q);pocty();
+  var h=$('#hladaj');if(h){h.addEventListener('input',function(){var p=h.selectionStart;ukaz('klienti',h.value);var n=$('#hladaj');n.focus();n.setSelectionRange(p,p)})}
+  var pk=$('#pridaj-k');if(pk)pk.addEventListener('click',novyKlient);
+  var nu=$('#nova-u');if(nu)nu.addEventListener('submit',function(ev){ev.preventDefault();D.ulohy.push({id:Date.now(),text:$('#u-text').value,datum:$('#u-datum').value,hotovo:false,klient:null});uloz();ukaz('ulohy')});}
+function novyKlient(){$('#panel').innerHTML='<button class="btn btn--ghost zavri" id="zavri">Zavrieť</button><h2>Nový klient</h2><form id="nk" style="display:grid;gap:16px;margin-top:20px">'+
+  '<div class="pole"><label for="nk-m">Meno a priezvisko</label><input id="nk-m" required><span class="chyba">Vyplňte meno.</span></div>'+
+  '<div class="pole"><label for="nk-t">Telefón</label><input id="nk-t" type="tel"></div><div class="pole"><label for="nk-c">Mesto</label><input id="nk-c"></div>'+
+  '<button class="btn btn--primary" style="justify-self:start">Uložiť klienta</button></form>';
+  $('#panel').classList.add('on');$('#zavri').onclick=function(){$('#panel').classList.remove('on')};
+  $('#nk').onsubmit=function(ev){ev.preventDefault();var m=$('#nk-m').value.trim();if(!m){$('#nk-m').closest('.pole').classList.add('je-chyba');return}
+   var id=Date.now();D.klienti.unshift({id:id,meno:m,tel:$('#nk-t').value,mesto:$('#nk-c').value,poznamky:[]});uloz();ukaz('klienti');detail(id)}}
+function detail(id){var k=kl(id),zs=D.zmluvy.filter(function(z){return z.klient==id});
+  $('#panel').innerHTML='<button class="btn btn--ghost zavri" id="zavri">Zavrieť</button><h2>'+esc(k.meno)+'</h2><p class="muted">'+esc(k.mesto)+', <a class="odkaz" href="tel:'+esc(k.tel.replace(/\s/g,''))+'">'+esc(k.tel)+'</a></p>'+
+  '<h3 style="margin:24px 0 10px;font-size:17px">Zmluvy</h3>'+(zs.length?zs.map(function(z){return '<div class="pozn"><b>'+esc(z.typ)+'</b>, '+esc(z.partner)+'<br>'+esc(z.suma)+', '+esc(z.termin)+' '+dat(z.datum)+' '+stav(z.datum)+'</div>'}).join(''):'<p class="muted">Zatiaľ žiadne.</p>')+
+  '<h3 style="margin:24px 0 10px;font-size:17px">Poznámky</h3><form id="pozn-f"><textarea id="pozn-t" rows="3" placeholder="Napr. zvažujú refinancovanie, ozvať sa v novembri" aria-label="Poznámka"></textarea><button class="btn btn--primary" style="margin-top:8px">Uložiť poznámku</button></form>'+
+  (k.poznamky||[]).slice().reverse().map(function(p){return '<div class="pozn"><span class="muted">'+dat(p.d)+'</span><br>'+esc(p.t)+'</div>'}).join('');
+  $('#panel').classList.add('on');$('#zavri').onclick=function(){$('#panel').classList.remove('on')};
+  $('#pozn-f').onsubmit=function(ev){ev.preventDefault();var t=$('#pozn-t').value.trim();if(!t)return;(k.poznamky=k.poznamky||[]).push({d:new Date().toISOString(),t:t});uloz();detail(id)}}
+document.addEventListener('click',function(ev){var r=ev.target.closest('tr.klik');if(r)detail(r.dataset.k);
+  var b=ev.target.closest('.bok button');if(b)ukaz(b.dataset.v)});
+document.addEventListener('change',function(ev){var c=ev.target.closest('[data-u]');if(!c)return;
+  D.ulohy.forEach(function(u){if(u.id==c.dataset.u)u.hotovo=c.checked});uloz();ukaz('ulohy')});
+$('#reset').addEventListener('click',function(ev){ev.preventDefault();D=novy();uloz();ukaz(akt)});
+function vstup(){$('#prihlas').style.display='none';$('#app').classList.add('on');ukaz('prehlad')}
+try{if(sessionStorage.getItem(KEY+'-in'))vstup()}catch(x){}
+$('#prihlas form').addEventListener('submit',function(ev){ev.preventDefault();var p=$('#heslo').closest('.pole');
+  if($('#heslo').value==='poradca'){try{sessionStorage.setItem(KEY+'-in','1')}catch(x){}vstup()}else p.classList.add('je-chyba')});
+})();
+</script>
+</body></html>
